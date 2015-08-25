@@ -3,49 +3,74 @@
  */
 var express = require('express');
 var router = express.Router();
-var Q = require("Q");
-var moment = require("moment");
+var jwt = require('express-jwt');
+var app = require("../../app");
+var jsonwebtoken = require("jsonwebtoken");
+var tokenManager  = require("../../util/tokenManager");
 
-var jwt =  require('express-jwt');
+
+/**
+ * 用户业务
+ * @type {*|require}
+ */
+var userService = new require("../../services/user/user.sev");
+var redisClient  = require("../../start/db").redis;
 
 
 
 /**
  * 登录系统
  */
-router.all("/login", function (req, res) {
-    console.log("/ login ctrl... /");
+router.get("/login", function (req,res) {
 
     var userName = req.query.userName;
     var passWord = req.query.passWord;
 
-    if(!userName || !passWord){
+
+    if (!userName || !passWord) {
         return res.send(401);
     }
 
-    var user  = {
-        userName : userName,
-        passWord : passWord
-    }
+    //登录用户
+    userService
+        .login(userName, passWord)
+        .then(function (user) {
 
-    var token = jwt.sign(user, "locak221b", { expiresInMinutes: 60 });
+            var token = jsonwebtoken.sign(user, "lock221b", {expiresInMinutes: tokenManager.TOKEN_EXPIRATION });
 
-    res.json({
-        token : token
-    });
+            //存入redis
+            redisClient.set(token,"");
+
+            return res.json({token:token});
+        })
+        .fail(function (err) {
+            console.log(err);
+        });
 
 });
 
+
+router.get("/logout",function(req,res){
+    if (req.user) {
+
+        tokenManager.expireToken(req.headers);
+        delete req.user;
+        return res.send(200);
+    }
+    else {
+        return res.send(401);
+    }
+});
 
 /**
- * 登出
+ * 注册
  */
-router.all("loginOut",function(req,res){
-   console.log("loginOut");
+router.get("/register",function (req,res) {
+        console.log("register...");
+
+
+    res.json({"111":111});
 });
-
-
-
 
 
 module.exports = router;

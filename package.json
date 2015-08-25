@@ -27,8 +27,8 @@
 
     "connect-redis" : "*",
     "redis" : "*",
-    "jsonwebtoken" : "*",
 
-    "jwt-simple"  : "*"
+    "express-jwt" : "*",
+    "jsonwebtoken" : "*"
   }
 }

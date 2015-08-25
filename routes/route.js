@@ -21,11 +21,6 @@ var init  = function(app){
     }
 
 
-    //app post
-    app.get('/post/all', jwt({secret: app.get("jwtTokenSecret")}),function(req,res){
-        console.log("post.all....");
-
-    });
 }
 
 exports.init = init;
