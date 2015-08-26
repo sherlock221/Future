@@ -3,74 +3,53 @@
  */
 var express = require('express');
 var router = express.Router();
-var jwt = require('express-jwt');
-var app = require("../../app");
-var jsonwebtoken = require("jsonwebtoken");
-var tokenManager  = require("../../util/tokenManager");
-
-
-/**
- * 用户业务
- * @type {*|require}
- */
-var userService = new require("../../services/user/user.sev");
-var redisClient  = require("../../start/db").redis;
-
+var Q = require("Q");
 
 
 /**
  * 登录系统
  */
-router.get("/login", function (req,res) {
+router.post("/login", function (req, res) {
+    console.log("/ login ctrl... /");
 
-    var userName = req.query.userName;
-    var passWord = req.query.passWord;
+    var userName = req.params.userName;
+    var passWord = req.params.passWord;
 
+    //查找用户信息，看是否满足登陆条件
+    var user = findUser(username, password);
 
-    if (!userName || !passWord) {
-        return res.send(401);
-    }
+    if(user){
+        //成功获取用户对象
+        req.session.regenerate(function(){
+            req.user = user;
+            req.session.userId = user.id;
+            req.session.save();  //保存一下修改后的Session
 
-    //登录用户
-    userService
-        .login(userName, passWord)
-        .then(function (user) {
-
-            var token = jsonwebtoken.sign(user, "lock221b", {expiresInMinutes: tokenManager.TOKEN_EXPIRATION });
-
-            //存入redis
-            redisClient.set(token,"");
-
-            return res.json({token:token});
-        })
-        .fail(function (err) {
-            console.log(err);
+            res.redirect('/account');
         });
+    }
+    else{
+        //用户信息不符合，登陆失败
+    }
 
 });
 
-
-router.get("/logout",function(req,res){
-    if (req.user) {
-
-        tokenManager.expireToken(req.headers);
-        delete req.user;
-        return res.send(200);
-    }
-    else {
-        return res.send(401);
-    }
-});
 
 /**
- * 注册
+ * 登出
  */
-router.get("/register",function (req,res) {
-        console.log("register...");
+router.post("loginOut",function(req,res){
+    req.clearCookie('connect.sid');
+    req.user = null;
 
-
-    res.json({"111":111});
+    req.session.regenerate(function(){
+        //重新生成session之后后续的处理
+        res.redirect('/signin');
+    })
 });
+
+
+
 
 
 module.exports = router;
