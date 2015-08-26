@@ -7,42 +7,30 @@ var Q = require("Q");
 var fs = require("fs");
 
 
-
+//微信设置
 var WECHAT_SETTING  = require("../constants/weChatSetting");
-
 //微信服务
 var weChatAuthNet = require("../services/net/weChatAuth.net");
 
-
-//封装promise
-var readFile = function (fileName) {
-    var defer = Q.defer();
-    fs.readFile(fileName, function (err, data) {
-        if (!err) {
-            defer.resolve(data.toString());
-        }
-        else {
-            defer.reject(err);
-        }
-
-    });
-
-    return defer.promise;
-}
+//微信消息
+var weChatMessageNet = require("../services/net/weChatMessage.net.js");
 
 
-//cps
-var cpsReadFile = function(fileName){
-    return Q.nfcall(fs.readFile,fileName,'utf-8');
-}
 
-
-router.get("/", function (req, res) {
+//定时任务
+router.get("/wechat", function (req, res) {
     console.log("/ index /");
     console.log(req.session.id);
 
+    //获得微信消息
+    weChatMessageNet.sendText("@all","","",0,"你好我是奥博!").then(function(data){
 
-    weChatAuthNet.getToken(WECHAT_SETTING.CorpID,WECHAT_SETTING.Secret);
+        console.log(data);
+
+    },function(err){
+        console.log(err);
+    });
+
 
 
     res.json({"session": req.session.id});

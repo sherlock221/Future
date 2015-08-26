@@ -7,7 +7,7 @@
 var  routes =
     {
 
-        "/movie": require("./movie/index.ctrl"),
+        "/wechat/": require("./movie/index.ctrl"),
         "/"     : require("./main.ctrl")
     }
 

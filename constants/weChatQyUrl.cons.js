@@ -3,11 +3,19 @@ module.exports = {
     //获得accessToken
     getAccessToken: "https://qyapi.weixin.qq.com/cgi-bin/gettoken",
 
+    //获得微信服务器的ip段
+    getWeChatIPList : "https://qyapi.weixin.qq.com/cgi-bin/getcallbackip",
+
+    //发送消息
+    sendMessage : "https://qyapi.weixin.qq.com/cgi-bin/message/send",
+
     //通讯录
     contact: {
 
         //二次验证
         authSucc: "https://qyapi.weixin.qq.com/cgi-bin/user/authsucc",
+
+
 
         //通讯录部门
         department: {

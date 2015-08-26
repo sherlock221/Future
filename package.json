@@ -24,7 +24,7 @@
 
     "mobile-agent": "*",
 
-    "urllib": "*",
+    "request": "*",
     "Q" : "*",
     "connect-redis" : "*",
     "redis" : "*"

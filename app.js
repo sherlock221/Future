@@ -4,23 +4,24 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var log4js = require('log4js');
 var log = require('./log');
-var db  = require("./start/db");
 var cors  = require("./start/cors");
 var compression = require('compression');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
+var express_session = require('express-session');
 var route = require("./routes/route"); //路由
+
 
 //设置基础
 var app = express();
 var wind = express();
 
+//环境
+global.APP_ENV =  app.get("env");
 
-//redis缓存初始化
-db.redis(app);
-
-//mysql初始化
-db.mysql(app);
+//redis缓存初始化 mysql 初始化
+var db  = require("./start/db");
+var accessTokenMiddleWare = require("./middle/accessTokenMiddleWare");
 
 
 //设置项目名称
@@ -42,18 +43,43 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser('keyboard cat'));
 
-
 //配置静态资源目录
 app.use("/"+app.locals.appName,express.static("public"));
 
-wind.use(function(req, res, next){
-    //项目名称
-    res.locals.rootPath = "/"+app.locals.appName;
-    //项目views绝对路径
-    res.locals.rootView = __dirname+"/views";
 
+//设置redis 存储session
+app.use(express_session({
+    store: db.redis,
+    secret: 'keyboard cat'
+}));
+
+
+
+//redis 异常捕获
+app.use(function (req, res, next) {
+    if (!req.session) {
+        return next(new Error('redis 出现错误异常!'));
+    }
     next();
 });
+
+
+//accessToken检测中间件
+app.use("/wechat",accessTokenMiddleWare);
+
+
+
+
+//
+//
+//wind.use(function(req, res, next){
+//    //项目名称
+//    res.locals.rootPath = "/"+app.locals.appName;
+//    //项目views绝对路径
+//    res.locals.rootView = __dirname+"/views";
+//
+//    next();
+//});
 
 
 //跨域设置
