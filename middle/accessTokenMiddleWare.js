@@ -11,11 +11,15 @@ var weChatAuthNet = require("../services/net/weChatAuth.net");
 
 module.exports = function(req,res,next){
 
+
+
+
     redisClient.get("access_token", function(err, reply) {
         console.log("access_token",reply);
 
         if(!reply){
             console.log("获得新的access_token...");
+
             weChatAuthNet.getToken(WECHAT_SETTING.CorpID,WECHAT_SETTING.Secret)
                 .then(function(data){
 
@@ -43,6 +47,8 @@ module.exports = function(req,res,next){
             next();
         }
     });
+
+
 
 }
 

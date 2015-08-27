@@ -46,6 +46,31 @@ module.exports = {
         return defer.promise;
     },
 
+
+    /**
+     * 微信get
+     * @param url
+     * @param params
+     * @returns {*|r.promise|Function|promise}
+     */
+    getWeChat: function (url, params) {
+
+        url += "?access_token=" + global._access_token;
+        var defer = Q.defer();
+        request.get(url, {
+            qs: params
+        }, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                defer.resolve(JSON.parse(body));
+            }
+            else {
+                defer.reject(error, response);
+            }
+        })
+
+        return defer.promise;
+    },
+
     /**
      * post微信
      * @param url
@@ -63,6 +88,7 @@ module.exports = {
 
                 //创建模板
                 var result = responseHelper.resultData;
+                result.from = "wechat";
 
                 //错误code
                 if (body.errcode) {
