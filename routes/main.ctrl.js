@@ -18,22 +18,19 @@ var weChatMessageNet = require("../services/net/weChatMessage.net.js");
 
 
 //定时任务
-router.get("/wechat", function (req, res) {
+router.get("/wechat", function (req, res,next) {
     console.log("/ index /");
     console.log(req.session.id);
 
     //获得微信消息
     weChatMessageNet.sendText("@all","","",0,"你好我是奥博!").then(function(data){
-
-        console.log(data);
+        res.json(data);
 
     },function(err){
-        console.log(err);
+        next(err);
     });
 
 
-
-    res.json({"session": req.session.id});
 
 });
 

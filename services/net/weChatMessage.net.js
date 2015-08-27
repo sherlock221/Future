@@ -11,7 +11,7 @@ var  httpHelper      = require("../../util/httpHelper");
 var WeChatMessageSev = {
 
     send : function(params){
-        return httpHelper.post(WECHAT_QY_URL.sendMessage,params);
+        return httpHelper.postWeChat(WECHAT_QY_URL.sendMessage,params);
     },
 
 
@@ -37,7 +37,6 @@ var WeChatMessageSev = {
         }
         return this.send(params);
     }
-
 
 };
 
