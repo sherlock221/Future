@@ -18,6 +18,7 @@ module.exports = function(req,res,next){
         console.log("access_token",reply);
 
         if(!reply){
+
             console.log("获得新的access_token...");
 
             weChatAuthNet.getToken(WECHAT_SETTING.CorpID,WECHAT_SETTING.Secret)

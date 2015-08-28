@@ -60,8 +60,25 @@ module.exports = {
         request.get(url, {
             qs: params
         }, function (error, response, body) {
+
             if (!error && response.statusCode == 200) {
-                defer.resolve(JSON.parse(body));
+
+                body = JSON.parse(body);
+
+                //创建模板
+                var result = responseHelper.resultData;
+                result.from = "wechat";
+
+                //错误code
+                if (body.errcode) {
+                    result.rtnCode = body.errcode;
+                    result.msg = body.errmsg;
+                }
+                else {
+                    result.rtnCode = "0000000";
+                    result.bizData = body;
+                }
+                defer.resolve(result);
             }
             else {
                 defer.reject(error, response);

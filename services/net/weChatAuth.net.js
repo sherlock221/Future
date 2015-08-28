@@ -23,7 +23,7 @@ var WeChatAuthSev = {
             corpsecret : secret
         }
 
-        return httpHelper.get(WECHAT_QY_URL.getAccessToken,params);
+        return httpHelper.getWeChat(WECHAT_QY_URL.getAccessToken,params);
     }
 
 
