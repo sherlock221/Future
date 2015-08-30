@@ -15,6 +15,12 @@ module.exports = {
         //二次验证
         authSucc: "https://qyapi.weixin.qq.com/cgi-bin/user/authsucc",
 
+        //第三方服务商
+        third : {
+
+           "getProviderToken" : "https://qyapi.weixin.qq.com/cgi-bin/service/get_provider_token"
+
+        },
 
 
         //通讯录部门
