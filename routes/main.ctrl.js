@@ -25,7 +25,6 @@ router.get("/wechat", function (req, res, next) {
     console.log("/ index /");
     console.log(req.session.id);
 
-
     //获得微信消息
     //weChatMessageNet.sendText("@all","","",2,"你好我是奥博!").then(function(data){
     //    res.json(data);

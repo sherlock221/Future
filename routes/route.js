@@ -8,6 +8,8 @@ var  routes =
     {
 
         "/wechat/": require("./movie/index.ctrl"),
+        "/leave"  : require("./leave/leave.ctrl"),
+        "/suite"  : require("./suite/suite.ctrl"),
         "/"     : require("./main.ctrl")
     }
 
