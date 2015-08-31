@@ -2,39 +2,56 @@ var express = require('express');
 var router = express.Router();
 var Q = require("Q");
 var fs = require("fs");
+var db  = require("../../start/db");
+var redis = require("redis");
+
+var wechat = require("wechat-enterprise");
+
+var WeChatThirdNet = require("../../services/net/weChatThird.net.js");
 
 
-//接受微信套件 回调
-router.post("/receive", function (req, res, next) {
-    console.log("/ from wechat  receive... /");
-
-    var msg_signature = req.query.msg_signature;
-    console.log(msg_signature);
-
-
-    //var dev_msg_signature  = sha1(sort(token、timestamp、nonce、msg_encrypt));
-
-    res.json("dd");
-});
-
-var load = function (stream, callback) {
-    // support content-type 'text/xml' using 'express-xml-bodyparser', which set raw xml string
-    // to 'req.rawBody'(while latest body-parser no longer set req.rawBody), see
-    // https://github.com/macedigital/express-xml-bodyparser/blob/master/lib/types/xml.js#L79
-    if (stream.rawBody) {
-        callback(null, stream.rawBody);
-        return;
-    }
-
-    var buffers = [];
-    stream.on('data', function (trunk) {
-        buffers.push(trunk);
-    });
-    stream.on('end', function () {
-        callback(null, Buffer.concat(buffers));
-    });
-    stream.once('error', callback);
+var config = {
+    token: 'YzSsVRlr7',
+    encodingAESKey: 'AtsMKocAzFm7KiGNHyG3iTbOgwGj8eWzTB2L0QhoXOY',
+    corpId: 'tj202a67365d0115d0',
+    secret: '2ZJYP1A-KnN7gRMKiQBpJsSq8-_R3qECA1OEUOw6qk7PZCRUzK547Btc07EPfUGa'
 };
+
+
+//推送suite协议 间隔10分钟
+router.post('/receive', wechat(config, function (req, res, next) {
+    console.log("推送suite协议");
+    console.log("微信obj ", req.weixin);
+
+    if(req.weixin)
+        //存入redis
+        db.redis.set("suite_ticket", req.weixin.SuiteTicket,redis.print);
+
+    res.writeHead(200);
+    res.end('success');
+}));
+
+
+
+//获取预授权码
+//router.post("/login", function (req, res) {
+//    WeChatThirdNet
+//        .getSuiteToken(wx.SuiteId, config.secret, wx.SuiteTicket)
+//        //获取令牌
+//        .then(function (data) {
+//            return WeChatThirdNet.getPreAuthCode(wx.SuiteId, data.suite_access_token);
+//        })
+//        //获取预授权码
+//        .then(function (data) {
+//            console.log("预授权码",data.pre_auth_code);
+//            //存入redis
+//
+//        })
+//        .fail(function (err) {
+//            next(err);
+//        });
+//
+//});
 
 
 module.exports = router;

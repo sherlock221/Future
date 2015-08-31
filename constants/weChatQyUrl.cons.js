@@ -18,7 +18,14 @@ module.exports = {
         //第三方服务商
         third : {
 
-           "getProviderToken" : "https://qyapi.weixin.qq.com/cgi-bin/service/get_provider_token"
+
+           "getProviderToken" : "https://qyapi.weixin.qq.com/cgi-bin/service/get_provider_token",
+
+            //获取应用套件令牌
+            "getSuiteToken" : "https://qyapi.weixin.qq.com/cgi-bin/service/get_suite_token",
+
+            //获取预授权码
+            "getPreAuthCode"  : "https://qyapi.weixin.qq.com/cgi-bin/service/get_pre_auth_code"
 
         },
 

@@ -27,6 +27,8 @@
     "request": "*",
     "Q" : "*",
     "connect-redis" : "*",
-    "redis" : "*"
+    "redis" : "*",
+
+    "wechat-crypto"  : "*"
   }
 }
