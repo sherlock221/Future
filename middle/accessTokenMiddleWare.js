@@ -1,7 +1,6 @@
 var db  = require("../start/db");
 var weChatSetting  = require("../constants/weChatSetting");
 var redis = require("redis");
-
 var redisClient = db.redis.client;
 
 //微信设置

@@ -1,4 +1,7 @@
+
 var express = require('express');
+var app = express();
+global.APP_ENV =  app.get("env");
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -12,12 +15,9 @@ var express_session = require('express-session');
 var route = require("./routes/route"); //路由
 
 
-//设置基础
-var app = express();
 var wind = express();
 
-//环境
-global.APP_ENV =  app.get("env");
+
 
 //redis缓存初始化 mysql 初始化
 var db  = require("./start/db");
