@@ -49,6 +49,16 @@ router.post('/receive', wechat(config, function (req, res, next) {
 }));
 
 
+/**
+ * 授权结果
+ */
+router.get("/authCallBack",function(req,res){
+
+
+
+
+
+});
 
 
 /**
@@ -68,7 +78,7 @@ router.all("/authorize", function (req, res,next) {
             else{
                 var resData = new ResponseHelper.resultData();
                 resData.rtnCode = RESPONSE_STATUS.TICKET_EXPIRE;
-                resData.msg = "suite_ticket已经过期!"
+                resData.msg = "suite_ticket已经过期!";
                 resData.from = "system";
                 res.json(resData);
                 return Q.reject("wx");
@@ -83,10 +93,10 @@ router.all("/authorize", function (req, res,next) {
             data.from = "wechat";
             if(data.rtnCode == RESPONSE_STATUS.SUCCESS){
                 console.log("预授权码", data.bizData.pre_auth_code);
-                var redirect_uri = "";
+                var redirect_uri = "http://10.10.68.11";
                 var state = "1";
                 data.bizData = {
-                    url : _packageAuthorizeUrl(suiteInfo.suite_id,data.bizData.pre_auth_code,redirect_uri,state)
+                    url : _packageAuthorizeUrl(suiteInfo.SuiteId,data.bizData.pre_auth_code,redirect_uri,state)
                 }
             }
             res.json(data);
@@ -100,6 +110,15 @@ router.all("/authorize", function (req, res,next) {
 });
 
 
+/**
+ * 封装授权的url地址
+ * @param suite_id
+ * @param pre_auth_code
+ * @param redirect_uri
+ * @param state
+ * @returns {string}
+ * @private
+ */
 var  _packageAuthorizeUrl = function(suite_id,pre_auth_code,redirect_uri,state){
     return WECHAT_QY_URL.third.authPage + "?suite_id="+suite_id+"&pre_auth_code="+pre_auth_code+"&redirect_uri="+redirect_uri+"&state="+state;
 }
