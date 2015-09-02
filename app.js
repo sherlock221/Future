@@ -12,6 +12,7 @@ var compression = require('compression');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var express_session = require('express-session');
+var ResponseStatus =  require("./constants/responseStatus.cons");
 var route = require("./routes/route"); //路由
 
 
@@ -66,7 +67,6 @@ app.use(function (req, res, next) {
 
 //accessToken检测中间件
 app.use("/wechat",accessTokenMiddleWare);
-
 
 
 //

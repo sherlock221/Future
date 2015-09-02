@@ -1,6 +1,6 @@
 var request = require("request");
 var Q = require("Q");
-var responseHelper = require("./responseHelper");
+var ResponseHelper = require("./responseHelper");
 
 
 /**
@@ -66,7 +66,7 @@ module.exports = {
                 body = JSON.parse(body);
 
                 //创建模板
-                var result = responseHelper.resultData;
+                var result = new ResponseHelper.resultData();
                 result.from = "wechat";
 
                 //错误code
@@ -94,8 +94,11 @@ module.exports = {
      * @param params
      * @returns {*|r.promise|Function|promise}
      */
-    postWeChat: function (url, params) {
-        url += "?access_token=" + global._access_token;
+    postWeChat: function (url, params,hasAccesToken) {
+        if(hasAccesToken){
+            url += "?access_token=" + global._access_token;
+        }
+
         var defer = Q.defer();
         request.post(url, {
             body: params,
@@ -104,7 +107,7 @@ module.exports = {
             if (!error && response.statusCode == 200) {
 
                 //创建模板
-                var result = responseHelper.resultData;
+                var result = new  ResponseHelper.resultData();
                 result.from = "wechat";
 
                 //错误code

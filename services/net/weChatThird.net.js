@@ -23,9 +23,8 @@ var WeChatThirdSev = {
             provider_secret : secret
         }
 
-        return httpHelper.get(WECHAT_QY_URL.third.getProviderToken,params);
+        return httpHelper.postWeChat(WECHAT_QY_URL.third.getProviderToken,params);
     },
-
 
     /**
      * 获取预授权码
@@ -36,8 +35,8 @@ var WeChatThirdSev = {
     getPreAuthCode : function(suiteId,suiteAccessToken){
         var url =  WECHAT_QY_URL.third.getPreAuthCode+"?suite_access_token="+suiteAccessToken;
         var params = {
-            "suite_id": suiteId,
-            "appid":""
+            "suite_id": suiteId
+            //"appid":""
         }
         return httpHelper.postWeChat(url,params);
     },

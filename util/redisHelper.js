@@ -15,7 +15,7 @@ module.exports = {
                 defer.reject(err);
             }
             else{
-                defer.resolve(reply ? "abc" : reply);
+                defer.resolve(reply ? reply : "");
             }
         });
 

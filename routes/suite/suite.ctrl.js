@@ -4,7 +4,7 @@ var Q = require("Q");
 var fs = require("fs");
 var RedisHelper = require("../../util/redisHelper");
 var ResponseHelper = require("../../util/responseHelper");
-var StatusHelper = require("../../constants/responseStatus.con");
+var  WECHAT_QY_URL   = require("../../constants/weChatQyUrl.cons");
 var wechat = require("wechat-enterprise");
 
 var WeChatThirdNet = require("../../services/net/weChatThird.net.js");
@@ -29,8 +29,10 @@ router.post('/receive', wechat(config, function (req, res, next) {
 
         switch(req.weixin.InfoType){
             case "suite_ticket" :
+                //序列化
+                var wechatSer = JSON.stringify(req.weixin);
                 //存入redis
-                RedisHelper.set("suite_ticket",req.weixin);
+                RedisHelper.set("suite_ticket",wechatSer);
                 break;
             case "change_auth"  :
                 console.log("变更授权...");
@@ -49,24 +51,24 @@ router.post('/receive', wechat(config, function (req, res, next) {
 
 
 
-
 /**
  * 授权应用
  */
 router.all("/authorize", function (req, res,next) {
-    var resData = ResponseHelper.resultData;
-    var suiteInfo;
 
+    var suiteInfo;
     RedisHelper.get("suite_ticket")
         //获得ticket
         .then(function(wx) {
-            suiteInfo = wx;
-            if (suiteInfo) {
+            if (wx) {
+                //反序列化
+                suiteInfo = JSON.parse(wx);
                 return WeChatThirdNet.getSuiteToken(suiteInfo.SuiteId, config.secret, suiteInfo.SuiteTicket)
             }
             else{
-                resData.rtnCode = '9000000';
-                resData.msg = StatusHelper['9000000'];
+                var resData = new ResponseHelper.resultData();
+                resData.rtnCode = RESPONSE_STATUS.TICKET_EXPIRE;
+                resData.msg = "suite_ticket已经过期!"
                 resData.from = "system";
                 res.json(resData);
                 return Q.reject("wx");
@@ -74,26 +76,20 @@ router.all("/authorize", function (req, res,next) {
         })
         //获得suit_token
         .then(function (data) {
-            return WeChatThirdNet.getPreAuthCode(suiteInfo.SuiteId, data.suite_access_token);
+            return WeChatThirdNet.getPreAuthCode(suiteInfo.SuiteId, data.bizData.suite_access_token);
         })
         //获取预授权码
         .then(function (data) {
-            console.log("预授权码", data.pre_auth_code);
-            resData.from = "wechat";
-
-            if(!data.errcode){
-                resData.bizData  = {
-                    suite  : suiteInfo,
-                    pre_auth_code : data.pre_auth_code
-
-                };
+            data.from = "wechat";
+            if(data.rtnCode == RESPONSE_STATUS.SUCCESS){
+                console.log("预授权码", data.bizData.pre_auth_code);
+                var redirect_uri = "";
+                var state = "1";
+                data.bizData = {
+                    url : _packageAuthorizeUrl(suiteInfo.suite_id,data.bizData.pre_auth_code,redirect_uri,state)
+                }
             }
-            else{
-                resData.msg = data.msg;
-                resData.rtnCode = data.errcode;
-            }
-
-            res.json(resData);
+            res.json(data);
         })
         //失败
         .fail(function (err) {
@@ -102,6 +98,11 @@ router.all("/authorize", function (req, res,next) {
             }
         });
 });
+
+
+var  _packageAuthorizeUrl = function(suite_id,pre_auth_code,redirect_uri,state){
+    return WECHAT_QY_URL.third.authPage + "?suite_id="+suite_id+"&pre_auth_code="+pre_auth_code+"&redirect_uri="+redirect_uri+"&state="+state;
+}
 
 
 module.exports = router;

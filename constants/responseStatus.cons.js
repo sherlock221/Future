@@ -1,0 +1,5 @@
+//全局
+global.RESPONSE_STATUS = {
+     SUCCESS : "0000000",
+     TICKET_EXPIRE : "9000000"
+}

@@ -29,6 +29,7 @@
     "connect-redis" : "*",
     "redis" : "*",
 
-    "wechat-crypto"  : "*"
+    "wechat-crypto"  : "*",
+    "wechat-enterprise" : "*"
   }
 }

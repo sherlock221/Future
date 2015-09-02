@@ -9,26 +9,27 @@ module.exports = {
     //发送消息
     sendMessage : "https://qyapi.weixin.qq.com/cgi-bin/message/send",
 
+    //第三方服务商
+    third : {
+
+
+        "authPage"  : "https://qy.weixin.qq.com/cgi-bin/loginpage",
+
+        "getProviderToken" : "https://qyapi.weixin.qq.com/cgi-bin/service/get_provider_token",
+
+        //获取应用套件令牌
+        "getSuiteToken" : "https://qyapi.weixin.qq.com/cgi-bin/service/get_suite_token",
+
+        //获取预授权码
+        "getPreAuthCode"  : "https://qyapi.weixin.qq.com/cgi-bin/service/get_pre_auth_code"
+
+    },
+
     //通讯录
     contact: {
 
         //二次验证
         authSucc: "https://qyapi.weixin.qq.com/cgi-bin/user/authsucc",
-
-        //第三方服务商
-        third : {
-
-
-           "getProviderToken" : "https://qyapi.weixin.qq.com/cgi-bin/service/get_provider_token",
-
-            //获取应用套件令牌
-            "getSuiteToken" : "https://qyapi.weixin.qq.com/cgi-bin/service/get_suite_token",
-
-            //获取预授权码
-            "getPreAuthCode"  : "https://qyapi.weixin.qq.com/cgi-bin/service/get_pre_auth_code"
-
-        },
-
 
         //通讯录部门
         department: {
