@@ -1,3 +1,5 @@
+var host = "http://36.40.146.205:18092";
+
 module.exports = {
 
     //获得accessToken
@@ -12,6 +14,7 @@ module.exports = {
     //第三方服务商
     third : {
 
+        "redirectUri" : host+"/suite/authCallBack",
 
         "authPage"  : "https://qy.weixin.qq.com/cgi-bin/loginpage",
 
@@ -21,7 +24,10 @@ module.exports = {
         "getSuiteToken" : "https://qyapi.weixin.qq.com/cgi-bin/service/get_suite_token",
 
         //获取预授权码
-        "getPreAuthCode"  : "https://qyapi.weixin.qq.com/cgi-bin/service/get_pre_auth_code"
+        "getPreAuthCode"  : "https://qyapi.weixin.qq.com/cgi-bin/service/get_pre_auth_code",
+
+        //获得永久授权码
+        "getPermanentCode" : "https://qyapi.weixin.qq.com/cgi-bin/service/get_permanent_code"
 
     },
 

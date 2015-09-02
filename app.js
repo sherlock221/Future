@@ -19,7 +19,6 @@ var route = require("./routes/route"); //路由
 var wind = express();
 
 
-
 //redis缓存初始化 mysql 初始化
 var db  = require("./start/db");
 var accessTokenMiddleWare = require("./middle/accessTokenMiddleWare");

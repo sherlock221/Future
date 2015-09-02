@@ -13,8 +13,8 @@ var http = require('http');
  */
 
 //var port = normalizePort(process.env.PORT || '3001');
-//var port = normalizePort(process.env.PORT || '18092');
-var port = normalizePort(process.env.PORT || '8080');
+var port = normalizePort(process.env.PORT || '18092');
+//var port = normalizePort(process.env.PORT || '8080');
 app.set('port', port);
 
 /**
@@ -26,6 +26,7 @@ var server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
+
 
 server.listen(port);
 server.on('error', onError);
@@ -88,6 +89,10 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
+
+
+  //主机地址
+  global._HOST_ADDRESS = addr;
 
   debug('Listening on ' + bind);
   console.log('Listening on ' + bind);

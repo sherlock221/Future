@@ -56,9 +56,23 @@ var WeChatThirdSev = {
             "suite_ticket": suiteTicket
         }
         return httpHelper.postWeChat(WECHAT_QY_URL.third.getSuiteToken,params);
+    },
+
+
+    /**
+     * 获得永久授权码
+     * @param suiteId
+     * @param authCode
+     * @param suiteAccessToken
+     */
+    getPermanentCode : function(suiteId,authCode,suiteAccessToken){
+        var params = {
+            "suite_id":suiteId ,
+            "auth_code": authCode
+        }
+        var tempUrl =  WECHAT_QY_URL.third.getPermanentCode +"?suite_access_token="+suiteAccessToken;
+        return httpHelper.postWeChat(tempUrl,params);
     }
-
-
 
 };
 

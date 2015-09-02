@@ -8,11 +8,17 @@
 <body>
 
 
-
+<button onclick="suite()">授权</button>
 </body>
 <script type="text/javascript">
 
-    console.log($(""))
+    function suite(){
+        $.post("/suite/authorize",{},function(data){
+            var url = data.bizData.url;
+            window.location.href = url;
+        },"json");
+    }
+
 
 </script>
 </html>
