@@ -13,7 +13,9 @@ var WeChatThirdNet = require("../../services/net/weChatThird.net.js");
 var config = {
     token: 'YzSsVRlr7',
     encodingAESKey: 'AtsMKocAzFm7KiGNHyG3iTbOgwGj8eWzTB2L0QhoXOY',
+    //套件id
     corpId: 'tj202a67365d0115d0',
+    //套件serect
     secret: '2ZJYP1A-KnN7gRMKiQBpJsSq8-_R3qECA1OEUOw6qk7PZCRUzK547Btc07EPfUGa'
 };
 
@@ -26,7 +28,6 @@ router.post('/receive', wechat(config, function (req, res, next) {
     console.log("微信obj ", req.weixin);
 
     if (req.weixin){
-
         switch(req.weixin.InfoType){
             case "suite_ticket" :
                 //序列化
@@ -47,7 +48,6 @@ router.post('/receive', wechat(config, function (req, res, next) {
 
     res.send('success');
 }));
-
 
 
 
